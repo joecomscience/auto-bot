@@ -1,0 +1,27 @@
+{
+  "name": "auto-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cypress": "$(npm bin)/cypress open",
+    "dev": "nodemon src/facebook/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joecomscience/auto-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joecomscience/auto-bot/issues"
+  },
+  "homepage": "https://github.com/joecomscience/auto-bot#readme",
+  "dependencies": {
+    "cypress": "^3.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}
