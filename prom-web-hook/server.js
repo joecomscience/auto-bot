@@ -3,14 +3,14 @@ const express = require('express');
 const { sendSms } = require('./sms');
 
 const app = express();
-const port = process.env.SMS_URI ? process.env.SMS_URI : 3000
-const server = () => console.log(`server start listening port: ${port}`);
+const port = process.env.SMS_URI ? process.env.SMS_URI : 3000;
+const onListen = () => console.log(`server start listening port: ${port}`);
 
 const healthCheckCtrl = (req, res) => res.sendStatus(200);
-const gracefulShutdown = (service) => {
-    const greacefulStop = () => process.exit()
+const gracefulShutdown = () => {
+    const greacefulStop = () => process.exit();
 
-    service.close((err) => {
+    server.close((err) => {
         if (err) {
             console.error(err);
             process.exit(1);
@@ -22,7 +22,7 @@ const gracefulShutdown = (service) => {
 
 app.get('/health', healthCheckCtrl);
 app.get('/sms', sendSms);
-app.listen(port, server);
+const server = app.listen(port, onListen);
 
-// process.on('SIGTERM', gracefulShutdown(app));
-// process.on('SIGINT', gracefulShutdown(app))
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown)
