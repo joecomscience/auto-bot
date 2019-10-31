@@ -15,6 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "prom-client": "^11.5.3",
+    "prometheus-api-metrics": "^2.2.3",
     "request": "^2.88.0",
     "xml2js": "^0.4.22"
   },
