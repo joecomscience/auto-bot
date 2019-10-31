@@ -1,8 +1,7 @@
 const request = require('request');
 const { parseString } = require('xml2js')
 
-// const URL = process.env.SMS_URI;
-const URL = 'http://cf1ts808.aycap.bayad.co.th:8099/MasMessageTranc/services/Masmessage?wsdl';
+const URL = process.env.SMS_URI;
 const getData = (info) => {
     return `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.ge.com" xmlns:bean="http://bean.ge.com">
         <soapenv:Header/>
