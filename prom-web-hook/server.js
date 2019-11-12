@@ -23,10 +23,12 @@ const gracefulShutdown = () => {
             process.exit(1);
         }
         console.info('Terminating services');
-        setTimeout(greacefulStop, 5000);
+        setTimeout(greacefulStop, 2000);
     });
 }
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(errHandler);
 app.use(apiMetrics());
 app.get('/readiness', readiness);

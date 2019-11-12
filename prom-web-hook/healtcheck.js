@@ -11,5 +11,5 @@ const readiness = (req, res) => {
 
 module.exports = {
   livediness,
-  readiness
+  readiness,
 };
