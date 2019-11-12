@@ -1,8 +1,11 @@
 const express = require('express');
 const apiMetrics = require('prometheus-api-metrics');
 const { sendSms } = require('./sms');
-const { livediness } = require('./healtcheck');
 const { errHandler } = require('./middleware');
+const {
+    livediness,
+    readiness
+ } = require('./healtcheck');
 
 const app = express();
 const port = process.env.SMS_URI ? process.env.SMS_URI : 3000;
@@ -26,9 +29,9 @@ const gracefulShutdown = () => {
 
 app.use(errHandler);
 app.use(apiMetrics());
-app.get('/readiness', healthCheckCtrl);
+app.get('/readiness', readiness);
 app.get('/livediness', livediness);
-app.get('/sms', sendSms);
+app.post('/sms', sendSms);
 
 const server = app.listen(port, onListen);
 
