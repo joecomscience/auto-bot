@@ -2,6 +2,7 @@ const request = require('request');
 const { parseString } = require('xml2js')
 
 const URL = process.env.SMS_URI;
+
 const getData = (info) => {
     return `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.ge.com" xmlns:bean="http://bean.ge.com">
         <soapenv:Header/>
@@ -23,12 +24,13 @@ const getData = (info) => {
             </ser:bean>
         </ser:saveSMS>
         </soapenv:Body>
-    </soapenv:Envelope>`
+    </soapenv:Envelope>`;
 }
 
-const sendMsgToSmsGateway = () => {
+const sendMsgToSmsGateway = ({ message, sendTo }) => {
+    console.info(`sending message: "${message}" to: ${sendTo}`);
     return new Promise((resolve, reject) => {
-        const body = getData({ msg: 'Send message from Openshift', telNo: '0883111111' });
+        const body = getData({ message, sendTo });
         const options = {
             url: URL,
             method: 'POST',
@@ -57,10 +59,48 @@ const sendMsgToSmsGateway = () => {
     });
 }
 
+const getPhoneNumber = () => ['0883105138'];
+
+const getAlertsMessage = ({ alerts }) => {
+    const msg = [];
+    for (const item of alerts) {
+        const message = item.annotations.description;
+        msg.push(message);
+    };
+    return msg;
+}
+
+const getAlertInfomation = (phones, messages) => {
+    const info = {};
+    for (const msg of messages) {
+        for (const phone of phones) {
+            info[msg] = phone;
+        };
+    };
+    return info;
+}
+
+const startSendingSMS = (information) => {
+    const requests = [];
+    for (const key in information) {
+        const message = key;
+        const sendTo = information[key];
+        requests.push(sendMsgToSmsGateway({ message, sendTo }));
+    }
+
+    return Promise.all(requests);
+}
+
 const sendSms = async (req, res) => {
-    console.log('sms')
-    const result = await sendMsgToSmsGateway()
-    console.log(JSON.stringify(result))
+    const phones = getPhoneNumber();
+    const alertMessages = getAlertsMessage(req.body);
+    const information = getAlertInfomation(phones, alertMessages);
+
+    try {
+        await startSendingSMS(information);
+    } catch (error) {
+        console.error(error);
+    }
     return res.sendStatus(200)
 };
 
