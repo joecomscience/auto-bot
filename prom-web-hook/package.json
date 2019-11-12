@@ -13,6 +13,11 @@
   ],
   "author": "Teerawit Laothong",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joecomscience/nodejs-projects.git",
+    "directory": "prom-web-hook"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "prom-client": "^11.5.3",
