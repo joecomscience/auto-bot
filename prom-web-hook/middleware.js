@@ -6,7 +6,7 @@ const errHandler = (err, req, res, next) => {
 
 const showSMSBody = (req, res, next) => {
   logger.info(`sms body: ${JSON.stringify(req.body)}`);
-  next(req, res);
+  next();
 };
 
 module.exports = {
