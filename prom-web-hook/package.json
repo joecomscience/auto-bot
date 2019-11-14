@@ -23,6 +23,7 @@
     "prom-client": "^11.5.3",
     "prometheus-api-metrics": "^2.2.3",
     "request": "^2.88.0",
+    "winston": "^3.2.1",
     "xml2js": "^0.4.22"
   },
   "devDependencies": {
