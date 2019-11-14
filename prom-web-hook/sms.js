@@ -44,12 +44,11 @@ const sendMsgToSmsGateway = ({ message, sendTo }) => {
 
     request(options, (err, res, body) => {
       if (err) {
-        logger.error(err);
         return reject(err);
       }
       const parseXMLToString = (err, result) => {
         if (err) {
-          logger.error(err);
+          logger.error(`convert sms to string fail: ${err}`);
           return reject(err);
         }
         return resolve(result);
@@ -61,10 +60,27 @@ const sendMsgToSmsGateway = ({ message, sendTo }) => {
 
 const getPhoneNumber = () => ["0883105138"];
 
+const createAlertMessage = annotations => {
+  let message = "";
+  let counter = 1;
+  const msgNumber = Object.keys(annotations).length;
+
+  for (const key in annotations) {
+    message += `${key}: ${annotations[key]}`;
+
+    if (counter !== msgNumber) {
+      message += "\n";
+      counter++;
+    }
+  }
+  return message;
+};
+
 const getAlertsMessage = ({ alerts }) => {
   const msg = [];
   for (const item of alerts) {
-    const message = item.annotations.description;
+    const { annotations } = item;
+    const message = createAlertMessage(annotations);
     msg.push(message);
   }
   return msg;
@@ -92,7 +108,6 @@ const startSendingSMS = information => {
 };
 
 const sendSms = async (req, res) => {
-  logger.debug(req.body);
   const phones = getPhoneNumber();
   const alertMessages = getAlertsMessage(req.body);
   const information = getAlertInfomation(phones, alertMessages);
@@ -100,7 +115,7 @@ const sendSms = async (req, res) => {
   try {
     await startSendingSMS(information);
   } catch (error) {
-    logger.error(error);
+    logger.error(`send all sms fail: ${error}`);
   }
   return res.sendStatus(200);
 };
