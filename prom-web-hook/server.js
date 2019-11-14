@@ -6,7 +6,7 @@ const { livediness, readiness } = require("./healtcheck");
 const logger = require("./logging");
 
 const app = express();
-const port = process.env.SMS_URI ? process.env.SMS_URI : 3000;
+const port = process.env.PORT ? process.env.PORT : 3000;
 const onListen = () => logger.info(`server start listening port: ${port}`);
 
 global.ready = true;
@@ -22,7 +22,7 @@ const gracefulShutdown = () => {
       process.exit(1);
     }
     logger.info("Terminating services");
-    setTimeout(greacefulStop, 2000);
+    setTimeout(greacefulStop, 5000);
   });
 };
 
