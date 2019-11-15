@@ -58,7 +58,7 @@ const sendMsgToSmsGateway = ({ message, sendTo }) => {
   });
 };
 
-const getPhoneNumber = () => ["66883105138"];
+const getPhoneNumber = () => ["66866815893773", "66804016745", "66883105138", "66836013803"];
 
 const createAlertMessage = annotations => {
   let message = "";
