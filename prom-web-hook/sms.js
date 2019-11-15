@@ -38,7 +38,7 @@ const sendMsgToSmsGateway = ({ message, sendTo }) => {
       headers: {
         "Content-Type": "text/xml;charset=utf-8",
         "Content-Length": body.length,
-        SOAPAction: "saveSMS"
+        "SOAPAction": "saveSMS"
       }
     };
 
@@ -58,7 +58,7 @@ const sendMsgToSmsGateway = ({ message, sendTo }) => {
   });
 };
 
-const getPhoneNumber = () => ["0883105138"];
+const getPhoneNumber = () => ["66883105138"];
 
 const createAlertMessage = annotations => {
   let message = "";
