@@ -3,7 +3,7 @@ const { parseString } = require("xml2js");
 
 const URL = process.env.SMS_URI;
 
-const getData = info => {
+const getData = ({message, sendTo}) => {
   return `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.ge.com" xmlns:bean="http://bean.ge.com">
         <soapenv:Header/>
         <soapenv:Body>
@@ -15,12 +15,12 @@ const getData = info => {
                 <bean:cardNo></bean:cardNo>
                 <bean:channel>INFO</bean:channel>
                 <bean:lang>THA</bean:lang>
-                <bean:msg>${info.msg}</bean:msg>
+                <bean:msg>${message}</bean:msg>
                 <bean:profile>KRUNGSRIGRP_EN</bean:profile>
                 <bean:refMsgCode></bean:refMsgCode>
                 <bean:scheduling></bean:scheduling>
                 <bean:subApp>OPENSHIFT</bean:subApp>
-                <bean:telNo>${info.telNo}</bean:telNo>
+                <bean:telNo>${sendTo}</bean:telNo>
             </ser:bean>
         </ser:saveSMS>
         </soapenv:Body>
@@ -58,7 +58,7 @@ const sendMsgToSmsGateway = ({ message, sendTo }) => {
   });
 };
 
-const getPhoneNumber = () => ["66866815893773", "66804016745", "66883105138", "66836013803"];
+const getPhoneNumber = () => ["66815893773", "66804016745", "66883105138", "66836013803"];
 
 const createAlertMessage = annotations => {
   let message = "";
@@ -90,7 +90,7 @@ const getAlertInfomation = (phones, messages) => {
   const info = {};
   for (const msg of messages) {
     for (const phone of phones) {
-      info[msg] = phone;
+      info[phone] = msg;
     }
   }
   return info;
@@ -99,8 +99,8 @@ const getAlertInfomation = (phones, messages) => {
 const startSendingSMS = information => {
   const requests = [];
   for (const key in information) {
-    const message = key;
-    const sendTo = information[key];
+    const message = information[key];
+    const sendTo = key;
     requests.push(sendMsgToSmsGateway({ message, sendTo }));
   }
 
